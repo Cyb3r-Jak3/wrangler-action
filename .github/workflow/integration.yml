@@ -1,0 +1,63 @@
+name: 'Integration'
+on:
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
+    paths:
+      - "**.ts"
+      - ".github/workflows/integration.yml"
+      - "action.yml"
+      - "dist/index.js"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout Example Repo
+        uses: actions/checkout@v3
+        with:
+          repository: Cyb3r-Jak3/worker-example-project
+
+      - name: Checkout Action
+        uses: actions/checkout@v3
+        with:
+          path: ./action
+
+      - name: Successful Action
+        uses: ./action
+        env:
+          CF_ZONE_ID: ${{ secrets.ZONE_ID }}
+          CLOUDFLARE_ACCOUNT_ID : ${{ secrets.ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.TEST_TOKEN }}
+
+      - name: Different Config
+        uses: ./action
+        with:
+          config: wrangler_copy.toml
+        env:
+          CF_ZONE_ID: ${{ secrets.ZONE_ID }}
+          CLOUDFLARE_ACCOUNT_ID : ${{ secrets.ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.TEST_TOKEN }}
+
+      - name: Different Environment
+        uses: ./action
+        with:
+          environment: staging
+        env:
+          HELLO: ${{ secrets.HELLO }}
+          CF_ZONE_ID: ${{ secrets.ZONE_ID_2 }}
+          CLOUDFLARE_ACCOUNT_ID : ${{ secrets.ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.TEST_TOKEN }}
+
+      - name: With Secrets Environment
+        uses: ./action
+        with:
+          secrets: |
+            HELLO
+        env:
+          HELLO: ${{ secrets.HELLO }}
+          CLOUDFLARE_ACCOUNT_ID : ${{secrets.ACCOUNT_ID}}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.TEST_TOKEN }}
