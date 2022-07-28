@@ -94,10 +94,10 @@ function run() {
         try {
             const config = (0, config_1.CreateConfig)();
             core.startGroup('Setup wrangler');
-            if (config.wranglerVersion.startsWith("1")) {
+            if (config.wranglerVersion.startsWith('1')) {
                 yield exec.exec(`npm install -g "@cloudflare/wrangler@${config.wranglerVersion}"`);
             }
-            else if (config.wranglerVersion !== "") {
+            else if (config.wranglerVersion !== '') {
                 yield exec.exec(`npm install -g "wrangler@${config.wranglerVersion}"`);
             }
             else {
@@ -112,11 +112,21 @@ function run() {
             if (config.config_file !== '') {
                 command_line_args.push('--config', config.config_file);
             }
-            const publish_output = yield exec.exec('wrangler', ['publish', ...command_line_args], {
-                ignoreReturnCode: true
-            });
+            let publish_output = 1;
+            if (config.command === '') {
+                core.notice("No command was provided, defaulting to 'publish'");
+                publish_output = yield exec.exec('wrangler', ['publish', ...command_line_args], {
+                    ignoreReturnCode: true
+                });
+            }
+            else {
+                if (config.environment !== '') {
+                    core.warning("You have specified an environment you need to make sure to pass in '--env $INPUT_ENVIRONMENT' to your command.");
+                }
+                publish_output = yield exec.exec('wrangler', [config.command]);
+            }
             if (publish_output !== 0) {
-                throw new Error('Publish command did not complete successfully');
+                core.setFailed(`Publish command did not complete successfully`);
             }
             core.endGroup();
             core.startGroup('Setting Secrets');

@@ -7,13 +7,6 @@ runs:
   using: 'node16'
   main: 'dist/index.js'
 inputs:
-  # apiToken:
-  #   description: "Your Cloudflare API Token"
-  #   required: false
-  # accountId:
-  #   description: "Your Cloudflare Account ID"
-  #   required: false
-
   environment:
     description: "The environment you'd like to publish your Workers project to - must be defined in wrangler.toml"
   workingDirectory:
