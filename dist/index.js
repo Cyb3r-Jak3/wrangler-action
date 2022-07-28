@@ -90,12 +90,7 @@ function run() {
             }
         }
         catch (error) {
-            if (error instanceof Error) {
-                core_1.default.setFailed(`Error occurred during run: ${error.message}`);
-            }
-            else {
-                core_1.default.setFailed(`Unknown error occurred during run ${error}`);
-            }
+            core_1.default.setFailed(`Error occurred during run: ${error}`);
         }
     });
 }

@@ -57,11 +57,7 @@ export async function run(): Promise<void> {
       core.endGroup()
     }
   } catch (error) {
-    if (error instanceof Error) {
-      core.setFailed(`Error occurred during run: ${error.message}`)
-    } else {
-      core.setFailed(`Unknown error occurred during run ${error}`)
-    }
+    core.setFailed(`Error occurred during run: ${error}`)
   }
 }
 
