@@ -6,20 +6,40 @@
 
 "use strict";
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CreateConfig = void 0;
-const core_1 = __importDefault(__nccwpck_require__(186));
+const core = __importStar(__nccwpck_require__(186));
 function CreateConfig() {
     return {
-        wranglerVersion: core_1.default.getInput('wranglerVersion'),
-        environment: core_1.default.getInput('environment'),
-        secrets: core_1.default.getMultilineInput('secrets'),
-        command: core_1.default.getInput('command'),
-        config_file: core_1.default.getInput('config'),
-        failMissingSecret: core_1.default.getBooleanInput('failMissingSecret')
+        wranglerVersion: core.getInput('wranglerVersion'),
+        environment: core.getInput('environment'),
+        secrets: core.getMultilineInput('secrets'),
+        command: core.getInput('command'),
+        config_file: core.getInput('config'),
+        failMissingSecret: core.getBooleanInput('failMissingSecret')
     };
 }
 exports.CreateConfig = CreateConfig;
@@ -32,6 +52,29 @@ exports.CreateConfig = CreateConfig;
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -41,22 +84,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
-const core_1 = __importDefault(__nccwpck_require__(186));
-const exec_1 = __importDefault(__nccwpck_require__(514));
+const core = __importStar(__nccwpck_require__(186));
+const exec = __importStar(__nccwpck_require__(514));
 const config_1 = __nccwpck_require__(88);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const config = (0, config_1.CreateConfig)();
-            core_1.default.startGroup('Setup wrangler');
-            yield exec_1.default.exec(`npm install "@cloudflare/wrangler@${config.wranglerVersion}"`);
-            core_1.default.endGroup();
-            core_1.default.startGroup('Publishing');
+            core.startGroup('Setup wrangler');
+            yield exec.exec(`npm install "@cloudflare/wrangler@${config.wranglerVersion}"`);
+            core.endGroup();
+            core.startGroup('Publishing');
             var command_line_args = [];
             if (config.environment !== '') {
                 command_line_args.push('--env', config.environment);
@@ -64,33 +104,33 @@ function run() {
             if (config.config_file !== '') {
                 command_line_args.push('--config', config.config_file);
             }
-            const publish_output = yield exec_1.default.exec('wrangler', ['publish', ...command_line_args], {
+            const publish_output = yield exec.exec('wrangler', ['publish', ...command_line_args], {
                 ignoreReturnCode: true
             });
             if (publish_output !== 0) {
                 throw new Error('Publish command did not complete successfully');
             }
-            core_1.default.endGroup();
-            core_1.default.startGroup('Setting Secrets');
+            core.endGroup();
+            core.startGroup('Setting Secrets');
             if (config.secrets.length !== 0) {
-                core_1.default.startGroup('Setting Secrets');
+                core.startGroup('Setting Secrets');
                 for (const secret of config.secrets) {
                     if (process.env[secret] === undefined && config.failMissingSecret) {
                         throw new Error(`Secret '${secret}' wanted and not set`);
                     }
-                    const secret_output = yield exec_1.default.getExecOutput(`echo "${process.env[secret]}" | wrangler`, ['secret', 'put', `${secret}`, ...command_line_args], {
+                    const secret_output = yield exec.getExecOutput(`echo "${process.env[secret]}" | wrangler`, ['secret', 'put', `${secret}`, ...command_line_args], {
                         ignoreReturnCode: true
                     });
-                    core_1.default.info((secret_output.stdout, secret_output.stderr));
+                    core.info((secret_output.stdout, secret_output.stderr));
                     if (secret_output.exitCode !== 0) {
                         throw new Error(`Error setting secret '${secret}': ${secret_output.stdout}, ${secret_output.stderr}`);
                     }
                 }
-                core_1.default.endGroup();
+                core.endGroup();
             }
         }
         catch (error) {
-            core_1.default.setFailed(`Error occurred during run: ${error}`);
+            core.setFailed(`Error occurred during run: ${error}`);
         }
     });
 }
