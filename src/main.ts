@@ -6,9 +6,20 @@ export async function run(): Promise<void> {
   try {
     const config: Config = CreateConfig()
     core.startGroup('Setup wrangler')
-    await exec.exec(
-      `npm install "@cloudflare/wrangler@${config.wranglerVersion}"`
-    )
+    if (config.wranglerVersion.startsWith("1")) {
+        await exec.exec(
+            `npm install -g "@cloudflare/wrangler@${config.wranglerVersion}"`
+          )
+    } else if (config.wranglerVersion !== "") {
+        await exec.exec(
+            `npm install -g "wrangler@${config.wranglerVersion}"`
+          )
+    } else {
+        await exec.exec(
+            `npm install -g wrangler`
+          )
+    }
+
     core.endGroup()
 
     core.startGroup('Publishing')

@@ -22,7 +22,6 @@ inputs:
   wranglerVersion:
     description: "The version of Wrangler you'd like to use to publish your Workers project"
     required: false
-    default: 2
   secrets:
     description: "A new line delimitated string of environment variable names that should be configured as Worker secrets"
     required: false
