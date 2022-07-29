@@ -12,7 +12,7 @@ on:
       - "dist/index.js"
 
 jobs:
-  test:
+  Integrate:
     runs-on: ubuntu-latest
     steps:
 

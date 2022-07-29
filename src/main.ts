@@ -5,17 +5,17 @@ import {Config, CreateConfig} from './config'
 export async function run(): Promise<void> {
   try {
     const config: Config = CreateConfig()
+
     core.startGroup('Setup wrangler')
+    let installVersion = 'wrangler'
+
     if (config.wranglerVersion.startsWith('1')) {
-      await exec.exec(
-        `npm install -g "@cloudflare/wrangler@${config.wranglerVersion}"`
-      )
+      installVersion = `@cloudflare/wrangler@${config.wranglerVersion}`
     } else if (config.wranglerVersion !== '') {
-      await exec.exec(`npm install -g "wrangler@${config.wranglerVersion}"`)
-    } else {
-      await exec.exec(`npm install -g wrangler`)
+      installVersion = `wrangler@${config.wranglerVersion}`
     }
 
+    await exec.exec(`npm install --location=global "${installVersion}"`)
     core.endGroup()
 
     core.startGroup('Publishing')

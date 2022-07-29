@@ -94,15 +94,14 @@ function run() {
         try {
             const config = (0, config_1.CreateConfig)();
             core.startGroup('Setup wrangler');
+            let installVersion = 'wrangler';
             if (config.wranglerVersion.startsWith('1')) {
-                yield exec.exec(`npm install -g "@cloudflare/wrangler@${config.wranglerVersion}"`);
+                installVersion = `@cloudflare/wrangler@${config.wranglerVersion}`;
             }
             else if (config.wranglerVersion !== '') {
-                yield exec.exec(`npm install -g "wrangler@${config.wranglerVersion}"`);
+                installVersion = `wrangler@${config.wranglerVersion}`;
             }
-            else {
-                yield exec.exec(`npm install -g wrangler`);
-            }
+            yield exec.exec(`npm install --location=global "${installVersion}"`);
             core.endGroup();
             core.startGroup('Publishing');
             var command_line_args = [];
