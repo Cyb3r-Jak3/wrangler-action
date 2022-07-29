@@ -36,7 +36,8 @@ export async function run(): Promise<void> {
         'wrangler',
         ['publish', ...command_line_args],
         {
-          ignoreReturnCode: true
+          ignoreReturnCode: true,
+          cwd: config.workdir
         }
       )
     } else {
@@ -45,7 +46,9 @@ export async function run(): Promise<void> {
           "You have specified an environment you need to make sure to pass in '--env $INPUT_ENVIRONMENT' to your command."
         )
       }
-      publish_output = await exec.exec('wrangler', [config.command])
+      publish_output = await exec.exec('wrangler', [config.command], {
+        cwd: config.workdir
+      })
     }
 
     if (publish_output !== 0) {

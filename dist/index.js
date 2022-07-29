@@ -39,7 +39,8 @@ function CreateConfig() {
         secrets: core.getMultilineInput('secrets'),
         command: core.getInput('command'),
         config_file: core.getInput('config'),
-        failMissingSecret: core.getBooleanInput('failMissingSecret')
+        failMissingSecret: core.getBooleanInput('failMissingSecret'),
+        workdir: core.getInput('workingDirectory')
     };
 }
 exports.CreateConfig = CreateConfig;
@@ -115,14 +116,17 @@ function run() {
             if (config.command === '') {
                 core.notice("No command was provided, defaulting to 'publish'");
                 publish_output = yield exec.exec('wrangler', ['publish', ...command_line_args], {
-                    ignoreReturnCode: true
+                    ignoreReturnCode: true,
+                    cwd: config.workdir
                 });
             }
             else {
                 if (config.environment !== '') {
                     core.warning("You have specified an environment you need to make sure to pass in '--env $INPUT_ENVIRONMENT' to your command.");
                 }
-                publish_output = yield exec.exec('wrangler', [config.command]);
+                publish_output = yield exec.exec('wrangler', [config.command], {
+                    cwd: config.workdir
+                });
             }
             if (publish_output !== 0) {
                 core.setFailed(`Publish command did not complete successfully`);
