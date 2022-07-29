@@ -15,7 +15,7 @@ export async function run(): Promise<void> {
       installVersion = `wrangler@${config.wranglerVersion}`
     }
 
-    await exec.exec(`npm install --location=global "${installVersion}"`)
+    await exec.exec(`npm install "${installVersion}"`)
     core.endGroup()
 
     core.startGroup('Publishing')
