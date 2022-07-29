@@ -62,6 +62,9 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID : ${{secrets.ACCOUNT_ID}}
           CLOUDFLARE_API_TOKEN: ${{ secrets.TEST_TOKEN }}
 
+      - name: Remove Wrangler
+        run: npm uninstall --location=global wrangler
+
       - name: Wrangler Version 1
         uses: ./action
         with:
@@ -69,6 +72,9 @@ jobs:
         env:
           CLOUDFLARE_ACCOUNT_ID : ${{secrets.ACCOUNT_ID}}
           CLOUDFLARE_API_TOKEN: ${{ secrets.TEST_TOKEN }}
+
+      - name: Remove Wrangler
+        run: npm uninstall --location=global @cloudflare/wrangler
 
       - name: Wrangler 2
         uses: ./action
