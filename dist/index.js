@@ -101,7 +101,7 @@ function run() {
             else if (config.wranglerVersion !== '') {
                 installVersion = `wrangler@${config.wranglerVersion}`;
             }
-            yield exec.exec(`npm install "${installVersion}"`);
+            yield exec.exec(`npm install --location=global "${installVersion}"`);
             core.endGroup();
             core.startGroup('Publishing');
             var command_line_args = [];
