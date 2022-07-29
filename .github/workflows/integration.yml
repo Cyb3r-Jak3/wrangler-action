@@ -69,6 +69,7 @@ jobs:
         uses: ./action
         with:
           wranglerVersion: 1
+          config: wrangler_1.toml
         env:
           CF_ACCOUNT_ID : ${{secrets.ACCOUNT_ID}}
           CF_API_TOKEN: ${{ secrets.TEST_TOKEN }}
