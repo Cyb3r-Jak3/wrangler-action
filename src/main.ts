@@ -54,8 +54,6 @@ export async function run(): Promise<void> {
 
     core.endGroup()
 
-    core.startGroup('Setting Secrets')
-
     if (config.secrets.length !== 0) {
       core.startGroup('Setting Secrets')
       for (const secret of config.secrets) {
