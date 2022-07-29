@@ -16,15 +16,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Checkout Example Repo
-        uses: actions/checkout@v3
-        with:
-          repository: Cyb3r-Jak3/worker-example-project
-
       - name: Checkout Action
         uses: actions/checkout@v3
         with:
           path: ./action
+
+      - name: Checkout Example Repo to second path
+        uses: actions/checkout@v3
+        with:
+          repository: Cyb3r-Jak3/worker-example-project
+          path: example
+
+      - name: Wrangler with working directory
+        uses: ./action
+        with:
+          workingDirectory: ./example
+        env:
+          CLOUDFLARE_ACCOUNT_ID : ${{secrets.ACCOUNT_ID}}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.TEST_TOKEN }}
+
+      - name: Checkout Example Repo
+        uses: actions/checkout@v3
+        with:
+          repository: Cyb3r-Jak3/worker-example-project
 
       - name: Successful Action
         uses: ./action
@@ -81,20 +95,6 @@ jobs:
         uses: ./action
         with:
           wranglerVersion: 2
-        env:
-          CLOUDFLARE_ACCOUNT_ID : ${{secrets.ACCOUNT_ID}}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.TEST_TOKEN }}
-
-      - name: Checkout Example Repo to second path
-        uses: actions/checkout@v3
-        with:
-          repository: Cyb3r-Jak3/worker-example-project
-          path: example
-
-      - name: Wrangler with working directory
-        uses: ./action
-        with:
-          workingDirectory: ./example
         env:
           CLOUDFLARE_ACCOUNT_ID : ${{secrets.ACCOUNT_ID}}
           CLOUDFLARE_API_TOKEN: ${{ secrets.TEST_TOKEN }}
