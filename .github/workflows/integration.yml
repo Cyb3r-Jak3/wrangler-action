@@ -40,6 +40,11 @@ jobs:
         with:
           repository: Cyb3r-Jak3/worker-example-project
 
+      - name: Checkout Action
+        uses: actions/checkout@v3
+        with:
+          path: ./action
+
       - name: Successful Action
         uses: ./action
         env:
