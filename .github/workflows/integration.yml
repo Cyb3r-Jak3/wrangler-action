@@ -81,6 +81,16 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID : ${{secrets.ACCOUNT_ID}}
           CLOUDFLARE_API_TOKEN: ${{ secrets.TEST_TOKEN }}
 
+      - name: With Missing Secrets
+        uses: ./action
+        with:
+          secrets: |
+            HELLO
+        env:
+          CLOUDFLARE_ACCOUNT_ID : ${{secrets.ACCOUNT_ID}}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.TEST_TOKEN }}
+        continue-on-error: true
+
       - name: Remove Wrangler
         run: npm uninstall --location=global wrangler
 
