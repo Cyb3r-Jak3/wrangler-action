@@ -1,4 +1,4 @@
-import core from '@actions/core'
+import * as core from '@actions/core'
 
 export interface Config {
   wranglerVersion: string
@@ -7,6 +7,7 @@ export interface Config {
   command: string
   config_file: string
   failMissingSecret: boolean
+  workdir: string
 }
 
 export function CreateConfig(): Config {
@@ -16,6 +17,7 @@ export function CreateConfig(): Config {
     secrets: core.getMultilineInput('secrets'),
     command: core.getInput('command'),
     config_file: core.getInput('config'),
-    failMissingSecret: core.getBooleanInput('failMissingSecret')
+    failMissingSecret: core.getBooleanInput('failMissingSecret'),
+    workdir: core.getInput('workingDirectory')
   }
 }

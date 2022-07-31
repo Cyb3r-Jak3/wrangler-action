@@ -7,22 +7,11 @@ runs:
   using: 'node16'
   main: 'dist/index.js'
 inputs:
-  # apiToken:
-  #   description: "Your Cloudflare API Token"
-  #   required: false
-  # accountId:
-  #   description: "Your Cloudflare Account ID"
-  #   required: false
-
   environment:
     description: "The environment you'd like to publish your Workers project to - must be defined in wrangler.toml"
-  workingDirectory:
-    description: "The relative path which Wrangler commands should be run from"
-    required: false
   wranglerVersion:
-    description: "The version of Wrangler you'd like to use to publish your Workers project"
+    description: "The version of Wrangler you'd like to use to publish your project"
     required: false
-    default: 2
   secrets:
     description: "A new line delimitated string of environment variable names that should be configured as Worker secrets"
     required: false
@@ -34,3 +23,7 @@ inputs:
   failMissingSecret:
     description: "Boolean input to fail the job if a secret value is not set"
     default: true
+  workingDirectory:
+    description: "The relative path which Wrangler commands should be run from"
+    required: false
+    default: "."
